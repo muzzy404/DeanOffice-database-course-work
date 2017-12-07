@@ -4,10 +4,17 @@
 #include <QString>
 
 class Constants {
-  static constexpr QString ADMIN_LOGIN     = "DeanOfficeAdmin";
-  static constexpr QString TEACHER_LOGIN   = "DeanOfficeTeacher";
-  static constexpr QString SECRETARY_LOGIN = "DeanOfficeSecretary";
-}
+public:
+  static const QString ADMIN_LOGIN;
+  static const QString TEACHER_LOGIN;
+  static const QString SECRETARY_LOGIN;
 
+  static const QString ADMIN_USER;
+  static const QString TEACHER_USER;
+  static const QString SECRETARY_USER;
+
+  static const QString SERVER;
+  static const QString DATABASE;
+};
 
 #endif // CONSTANTS_H

@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 
+#include <QtSql/QSqlDatabase>
+
+#include <memory>
+
 namespace Ui {
   class MainWindow;
 }
@@ -19,7 +23,8 @@ private slots:
   void connectToDb();
 
 private:
-  Ui::MainWindow *ui;
+  Ui::MainWindow * ui;
+  std::shared_ptr<QSqlDatabase> db = nullptr;
 };
 
 #endif // MAINWINDOW_H

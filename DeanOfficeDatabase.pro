@@ -8,6 +8,8 @@ QT += core gui
 QT += network
 QT += sql
 
+CONFIG += c++14
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = DeanOfficeDatabase
@@ -27,11 +29,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    constants.cpp
 
 HEADERS += \
-        mainwindow.h \
-    constants.h
+        mainwindow.h
 
 FORMS += \
         mainwindow.ui
