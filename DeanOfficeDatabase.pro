@@ -30,10 +30,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    constants.cpp
+    constants.cpp \
+    secretarymainwindow.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    secretarymainwindow.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    secretarymainwindow.ui
