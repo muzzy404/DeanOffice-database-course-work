@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include "constants.h"
+#include "secretarymainwindow.h"
 
 #include <QMessageBox>
 #include <QString>
@@ -63,12 +64,31 @@ void MainWindow::connectToDb()
 
   QMessageBox msg;
   if (db->open()) {
-    msg.setText("Успешно!");
-  } else {
-    msg.setText("Ошибка соединения!" );
-  }
-  msg.exec();
 
+    switch (ui->comBoxUser->currentIndex()) {
+      case 0: // Admin
+
+        break;
+      case 1: // Teacher
+        break;
+      case 2: { // Secretary
+        SecretaryMainWindow * secretaryWindow = new SecretaryMainWindow(db);
+        secretaryWindow->show();
+        break;
+      }
+    }
+  } else {
+    QMessageBox msg;
+
+    msg.setStyleSheet("QLabel{min-width: 150px;}");
+    msg.setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint); // hide 'X'
+
+    msg.setWindowTitle("Ошибка входа");
+    msg.setText("Неверный пароль" );
+    msg.exec();
+  }
+
+  db = nullptr;
   //db->close();
 }
 

@@ -1,19 +1,4 @@
-#include <QString>
-
-class Constants {
-public:
-  static const QString ADMIN_LOGIN;
-  static const QString TEACHER_LOGIN;
-  static const QString SECRETARY_LOGIN;
-
-  static const QString ADMIN_USER;
-  static const QString TEACHER_USER;
-  static const QString SECRETARY_USER;
-
-  static const QString SERVER;
-  static const QString DATABASE;
-  static const QString DRIVER;
-};
+#include <constants.h>
 
 const QString Constants::ADMIN_LOGIN     = "DeanOfficeAdmin";
 const QString Constants::TEACHER_LOGIN   = "DeanOfficeTeacher";
