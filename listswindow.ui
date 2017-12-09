@@ -40,7 +40,7 @@
       </widget>
      </item>
      <item row="4" column="0">
-      <widget class="QComboBox" name="comboBox_3"/>
+      <widget class="QComboBox" name="ctrlComBoxDep"/>
      </item>
      <item row="3" column="1">
       <widget class="QLabel" name="label_7">
@@ -53,7 +53,7 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QSpinBox" name="spinBox_2"/>
+      <widget class="QSpinBox" name="ctrlSpinSem"/>
      </item>
      <item row="4" column="2">
       <spacer name="horizontalSpacer_3">
@@ -89,7 +89,7 @@
       </widget>
      </item>
      <item row="6" column="2">
-      <widget class="QPushButton" name="pushButton_5">
+      <widget class="QPushButton" name="ctrlBtnPassList">
        <property name="text">
         <string>Зачеты</string>
        </property>
@@ -112,7 +112,7 @@
       </widget>
      </item>
      <item row="7" column="2">
-      <widget class="QPushButton" name="pushButton_6">
+      <widget class="QPushButton" name="ctrlBtnExamsList">
        <property name="text">
         <string>Экзамены</string>
        </property>
@@ -156,21 +156,21 @@
       </widget>
      </item>
      <item row="6" column="2">
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="stBtnDepSemList">
        <property name="text">
         <string>Список потока</string>
        </property>
       </widget>
      </item>
      <item row="3" column="2">
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="stBtnGroupList">
        <property name="text">
         <string>Список группы</string>
        </property>
       </widget>
      </item>
      <item row="6" column="1">
-      <widget class="QSpinBox" name="spinBox">
+      <widget class="QSpinBox" name="stSpinSem">
        <property name="wrapping">
         <bool>false</bool>
        </property>
@@ -186,14 +186,14 @@
       </widget>
      </item>
      <item row="7" column="2">
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="stBtnExcellentsList">
        <property name="text">
         <string>Список отличников</string>
        </property>
       </widget>
      </item>
      <item row="6" column="0">
-      <widget class="QComboBox" name="comboBox_2"/>
+      <widget class="QComboBox" name="stComBoxDep"/>
      </item>
      <item row="0" column="0" colspan="3">
       <widget class="QLabel" name="label_4">
@@ -229,14 +229,14 @@
       </widget>
      </item>
      <item row="3" column="0">
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="stComBoxGroup"/>
      </item>
     </layout>
    </item>
    <item row="2" column="1">
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="3,1,1">
      <item row="5" column="0">
-      <widget class="QCheckBox" name="checkBox_3">
+      <widget class="QCheckBox" name="tchCheckBoxLeave">
        <property name="text">
         <string>Неработающие</string>
        </property>
@@ -266,7 +266,7 @@
       </widget>
      </item>
      <item row="4" column="0">
-      <widget class="QCheckBox" name="checkBox_2">
+      <widget class="QCheckBox" name="tchCheckBoxVacation">
        <property name="text">
         <string>В отпуске</string>
        </property>
@@ -299,23 +299,20 @@
       </spacer>
      </item>
      <item row="2" column="0">
-      <widget class="QCheckBox" name="checkBox">
+      <widget class="QCheckBox" name="tchCheckBoxWorking">
        <property name="text">
         <string>Рабатающие</string>
        </property>
       </widget>
      </item>
      <item row="6" column="1" colspan="2">
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="tchBtnList">
        <property name="text">
         <string>Список</string>
        </property>
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="0" column="0" rowspan="5">
-    <widget class="QListView" name="listView"/>
    </item>
    <item row="3" column="1">
     <spacer name="verticalSpacer_4">
@@ -329,6 +326,9 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="0" column="0" rowspan="5">
+    <widget class="QTableView" name="tableViewDataSpace"/>
    </item>
   </layout>
  </widget>
