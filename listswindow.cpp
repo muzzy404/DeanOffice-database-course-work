@@ -1,10 +1,12 @@
 #include "listswindow.h"
 #include "ui_listswindow.h"
 
+#include "projections.h"
+
 #include <QSqlTableModel>
 #include <QSqlQuery>
 
-#include <QStringList>
+#include <QMessageBox>
 
 ListsWindow::ListsWindow(std::shared_ptr<QSqlDatabase> database, QWidget * parent) :
   QWidget(parent),
@@ -25,13 +27,8 @@ ListsWindow::ListsWindow(std::shared_ptr<QSqlDatabase> database, QWidget * paren
 //  ui->tableViewDataSpace->setModel(model);
 //  ui->tableViewDataSpace->show();
 
-  uploadGroups();
-  QStringList groupsList;
-  for(GroupPair group : groups) {
-    groupsList.push_back(group.second);
-  }
-  ui->stComBoxGroup->addItems(groupsList);
-
+  on_btnRefresh_clicked();
+  on_stBtnGroupList_clicked();
 }
 
 ListsWindow::~ListsWindow()
@@ -39,13 +36,30 @@ ListsWindow::~ListsWindow()
   delete ui;
 }
 
-void ListsWindow::uploadGroups() {
-  QSqlQuery query("SELECT [id], [number] FROM Groups", *db);
+void ListsWindow::on_stBtnGroupList_clicked()
+{
+  int id = Projections::getGroupId(ui->stComBoxGroup->currentIndex());
 
-  while(query.next()) {
-    int id = query.value(0).toInt();
-    QString number = query.value(1).toString();
+  QSqlQueryModel * model = new QSqlQueryModel();
 
-    groups.push_back(std::make_pair(id, number));
-  }
+  QString query("SELECT Students.lastName, Students.firstName, Students.patronymic, Groups.number");
+  query.append(" FROM Students, Groups");
+  query.append(" WHERE Groups.id = ");
+  query.append(QString::number(id));
+
+  model->setQuery(query, *db);
+
+  model->setHeaderData(0, Qt::Horizontal, tr("Фамилия"));
+  model->setHeaderData(1, Qt::Horizontal, tr("Имя"));
+  model->setHeaderData(2, Qt::Horizontal, tr("Отчество"));
+  model->setHeaderData(3, Qt::Horizontal, tr("Группа"));
+
+  ui->tableViewDataSpace->setModel(model);
+  ui->tableViewDataSpace->show();
+}
+
+void ListsWindow::on_btnRefresh_clicked()
+{
+  Projections::updateAll(*db);
+  ui->stComBoxGroup->addItems(Projections::getGroupsList());
 }

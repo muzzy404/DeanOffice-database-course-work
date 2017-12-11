@@ -1,6 +1,8 @@
 #ifndef SECRETARYMAINWINDOW_H
 #define SECRETARYMAINWINDOW_H
 
+#include "listswindow.h"
+
 #include <QWidget>
 #include <QSqlDatabase>
 

@@ -32,13 +32,15 @@ SOURCES += \
         mainwindow.cpp \
     constants.cpp \
     secretarymainwindow.cpp \
-    listswindow.cpp
+    listswindow.cpp \
+    projections.cpp
 
 HEADERS += \
         mainwindow.h \
     secretarymainwindow.h \
     constants.h \
-    listswindow.h
+    listswindow.h \
+    projections.h
 
 FORMS += \
         mainwindow.ui \
