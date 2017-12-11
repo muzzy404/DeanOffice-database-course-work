@@ -11,14 +11,11 @@
 #include <QString>
 #include <QStringList>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget * parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
-
-  connect(ui->btnConnect, SIGNAL(released()), this,
-          SLOT(connectToDb()));
 
   const QStringList list = { Constants::ADMIN_USER,
                              Constants::TEACHER_USER,
@@ -33,7 +30,7 @@ MainWindow::~MainWindow()
   delete ui;
 }
 
-void MainWindow::connectToDb()
+void MainWindow::on_btnConnect_clicked()
 {
   QString user;
   switch (ui->comBoxUser->currentIndex()) {
@@ -91,4 +88,3 @@ void MainWindow::connectToDb()
   db = nullptr;
   //db->close();
 }
-
