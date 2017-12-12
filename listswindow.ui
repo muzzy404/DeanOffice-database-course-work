@@ -257,22 +257,37 @@
     <widget class="QTableView" name="tableViewDataSpace"/>
    </item>
    <item row="2" column="1" colspan="2">
-    <layout class="QGridLayout" name="gridLayout_2" columnstretch="3,1,1">
-     <item row="5" column="0">
-      <widget class="QCheckBox" name="tchCheckBoxLeave">
+    <layout class="QGridLayout" name="gridLayout_2" columnstretch="3,2,3,0">
+     <property name="verticalSpacing">
+      <number>6</number>
+     </property>
+     <item row="3" column="2" colspan="2">
+      <widget class="QComboBox" name="tchrComBoxDep"/>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QLabel" name="label_9">
        <property name="text">
-        <string>Неработающие</string>
+        <string>Статус</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
-     <item row="1" column="0" colspan="3">
-      <widget class="Line" name="line_2">
+     <item row="5" column="2" colspan="2">
+      <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-      </widget>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
-     <item row="0" column="0" colspan="3">
+     <item row="0" column="0" colspan="4">
       <widget class="QLabel" name="label_5">
        <property name="font">
         <font>
@@ -288,14 +303,44 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="QCheckBox" name="tchCheckBoxVacation">
-       <property name="text">
-        <string>В отпуске</string>
+     <item row="1" column="0" colspan="4">
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="4" column="0" colspan="4">
+      <spacer name="verticalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="5" column="1">
+      <widget class="QPushButton" name="tchBtnList">
+       <property name="text">
+        <string>Список</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2" colspan="2">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>Кафедра</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -308,32 +353,8 @@
        </property>
       </spacer>
      </item>
-     <item row="2" column="2">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="2" column="0">
-      <widget class="QCheckBox" name="tchCheckBoxWorking">
-       <property name="text">
-        <string>Рабатающие</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1" colspan="2">
-      <widget class="QPushButton" name="tchBtnList">
-       <property name="text">
-        <string>Список</string>
-       </property>
-      </widget>
+     <item row="3" column="0" colspan="2">
+      <widget class="QComboBox" name="tchrComBoxStatus"/>
      </item>
     </layout>
    </item>

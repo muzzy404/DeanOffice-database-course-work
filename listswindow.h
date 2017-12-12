@@ -38,6 +38,8 @@ private:
   std::unique_ptr<QSqlQueryModel> model = nullptr;
 
   void loadComboBoxItems();
+  void setFioHeaders();
+  void showQueryResult();
 };
 
 #endif // LISTSWINDOW_H

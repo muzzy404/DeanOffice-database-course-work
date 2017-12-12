@@ -19,14 +19,6 @@ ListsWindow::ListsWindow(std::shared_ptr<QSqlDatabase> database, QWidget * paren
 //  model->setTable("Students");
 //  model->select();
 
-//  QSqlQueryModel * model = new QSqlQueryModel();
-//  model->setQuery("SELECT Students.lastName, Groups.number FROM Students, Groups WHERE Students.groupNumber = Groups.id", *db);
-//  model->setHeaderData(0, Qt::Horizontal, tr("Фамилия"));
-//  model->setHeaderData(1, Qt::Horizontal, tr("Группа"));
-
-//  ui->tableViewDataSpace->setModel(model);
-//  ui->tableViewDataSpace->show();
-
   loadComboBoxItems();
   on_stBtnGroupList_clicked();
 }
@@ -42,7 +34,29 @@ void ListsWindow::loadComboBoxItems()
   Projections::updateAll(*db);
   ui->stComBoxGroup->addItems(Projections::getGroupsList());
   ui->stComBoxDep->addItems(Projections::getDepartmentsList());
+
+  ui->tchrComBoxStatus->addItems(Projections::getTeacherStatusesList());
+  ui->tchrComBoxDep->addItems(Projections::getDepartmentsList());
+
   ui->ctrlComBoxDep->addItems(Projections::getDepartmentsList());
+}
+
+void ListsWindow::setFioHeaders()
+{
+  model->setHeaderData(0, Qt::Horizontal, tr("Фамилия"));
+  model->setHeaderData(1, Qt::Horizontal, tr("Имя"));
+  model->setHeaderData(2, Qt::Horizontal, tr("Отчество"));
+}
+
+void ListsWindow::showQueryResult()
+{
+  if (model->rowCount() != 0) {
+    ui->tableViewDataSpace->setModel(model.get());
+    ui->tableViewDataSpace->show();
+    return;
+  }
+
+  QMessageBox::warning(this, "Совпадений не найдено", "По данному запросу записей не найдено");
 }
 
 void ListsWindow::on_stBtnGroupList_clicked()
@@ -52,20 +66,17 @@ void ListsWindow::on_stBtnGroupList_clicked()
   model.release();
   model = std::make_unique<QSqlQueryModel>();
 
-  QString query("SELECT Students.lastName, Students.firstName, Students.patronymic, Groups.number");
+  QString query("SELECT lastName, firstName, patronymic, Groups.number");
   query.append(" FROM Students, Groups");
   query.append(" WHERE Students.groupNumber = Groups.id AND Groups.id = ");
   query.append(QString::number(id));
 
   model->setQuery(query, *db);
 
-  model->setHeaderData(0, Qt::Horizontal, tr("Фамилия"));
-  model->setHeaderData(1, Qt::Horizontal, tr("Имя"));
-  model->setHeaderData(2, Qt::Horizontal, tr("Отчество"));
+  setFioHeaders();
   model->setHeaderData(3, Qt::Horizontal, tr("Группа"));
 
-  ui->tableViewDataSpace->setModel(model.get());
-  ui->tableViewDataSpace->show();
+  showQueryResult();
 }
 
 void ListsWindow::on_stBtnFlowList_clicked()
@@ -76,34 +87,34 @@ void ListsWindow::on_stBtnFlowList_clicked()
   model.release();
   model = std::make_unique<QSqlQueryModel>();
 
-  QString query("SELECT Students.lastName, Students.firstName, Students.patronymic");
-  query.append(" FROM Students, Departments, Groups");
+  QString query("SELECT DISTINCT lastName, firstName, patronymic");
+  query.append(" FROM Students, Groups");
   query.append(" WHERE Students.groupNumber = Groups.id AND");
-  query.append(" Groups.department = Departments.id AND Departments.id = ");
+  query.append(" Groups.department = ");
   query.append(QString::number(idDep));
   query.append(" AND Groups.semNum = ");
   query.append(QString::number(sem));
 
   model->setQuery(query, *db);
-
-  model->setHeaderData(0, Qt::Horizontal, tr("Фамилия"));
-  model->setHeaderData(1, Qt::Horizontal, tr("Имя"));
-  model->setHeaderData(2, Qt::Horizontal, tr("Отчество"));
-
-  ui->tableViewDataSpace->setModel(model.get());
-  ui->tableViewDataSpace->show();
+  setFioHeaders();
+  showQueryResult();
 }
 
 void ListsWindow::on_tchBtnList_clicked()
 {
-  if (!ui->tchCheckBoxWorking->isChecked()  &&
-      !ui->tchCheckBoxVacation->isChecked() &&
-      !ui->tchCheckBoxLeave->isChecked()) {
+  int statusId = Projections::getTeacherStatusId(ui->tchrComBoxStatus->currentIndex());
+  int depId    = Projections::getDepartmentsId(ui->tchrComBoxDep->currentIndex());
 
-    QMessageBox::warning(this, "Некорректный ввод",
-                         "Не выбран статус преподавателя");
-    return;
-  }
+  model.release();
+  model = std::make_unique<QSqlQueryModel>();
 
+  QString query("SELECT DISTINCT lastName, firstName, patronymic");
+  query.append(" FROM Teachers WHERE teacherStatus = ");
+  query.append(QString::number(statusId));
+  query.append(" AND department = ");
+  query.append(QString::number(depId));
 
+  model->setQuery(query, *db);
+  setFioHeaders();
+  showQueryResult();
 }
