@@ -15,6 +15,12 @@ QStringList Projections::teacherStatusesList;
 QStringList Projections::departmentsList;
 QStringList Projections::disciplinesList;
 
+int Projections::editWindows = 0;
+
+void Projections::editWindowOpened() { ++editWindows; }
+void Projections::editWindowClosed() { --editWindows; }
+bool Projections::editingAllowed() { return ((editWindows == 0) ? true : false); }
+
 void Projections::updateAll(const QSqlDatabase & db)
 {
   updateGroups(db);

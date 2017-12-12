@@ -12,6 +12,10 @@ class Projections
 public:
   Projections();
 
+  static void editWindowOpened();
+  static void editWindowClosed();
+  static bool editingAllowed();
+
   static void updateAll(const QSqlDatabase & db);
   static void updateGroups(const QSqlDatabase & db);
   static void updateStatuses(const QSqlDatabase & db);
@@ -46,6 +50,7 @@ private:
   static void load(std::vector<int> & ids, QStringList & list,
                    QString queryStr,
                    const QSqlDatabase & db);
+  static int editWindows;
 };
 
 #endif // PROJECTIONS_H
