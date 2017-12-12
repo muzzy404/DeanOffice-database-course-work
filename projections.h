@@ -29,7 +29,7 @@ public:
   static QStringList getDisciplinesList();
 
   static int getGroupId(int index);
-  static int getStudentStatusId(int index); //TODO
+  static int getStudentStatusId(int index);
   static int getTeacherStatusId(int index); //TODO
   static int getDepartmentsId(int index);   //TODO
   static int getDisciplinesId(int index);   //TODO

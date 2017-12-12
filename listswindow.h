@@ -8,6 +8,9 @@
 #include <memory>
 #include <utility>
 #include <vector>
+#include <memory>
+
+#include <QSqlQueryModel>
 
 namespace Ui {
   class ListsWindow;
@@ -24,11 +27,15 @@ public:
 private slots:
   void on_stBtnGroupList_clicked();
 
-  void on_btnRefresh_clicked();
+  void on_stBtnFlowList_clicked();
 
 private:
   Ui::ListsWindow * ui;
   std::shared_ptr<QSqlDatabase> db;
+
+  std::unique_ptr<QSqlQueryModel> model = nullptr;
+
+  void loadComboBoxItems();
 };
 
 #endif // LISTSWINDOW_H

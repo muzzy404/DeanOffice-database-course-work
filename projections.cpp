@@ -104,3 +104,23 @@ int Projections::getGroupId(int index)
 {
   return groupsIds.at(index);
 }
+
+int Projections::getStudentStatusId(int index)
+{
+  return studentStatusesIds.at(index);
+}
+
+int Projections::getTeacherStatusId(int index)
+{
+  return teacherStatusesIds.at(index);
+}
+
+int Projections::getDepartmentsId(int index)
+{
+  return departmentsIds.at(index);
+}
+
+int Projections::getDisciplinesId(int index)
+{
+  return disciplinesIds.at(index);
+}

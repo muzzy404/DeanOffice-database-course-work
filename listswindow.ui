@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Списки</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4" columnstretch="10,3,0">
+  <layout class="QGridLayout" name="gridLayout_4" columnstretch="12,4,0">
    <item row="4" column="1" colspan="2">
     <layout class="QGridLayout" name="gridLayout_3" columnstretch="2,1,2">
      <item row="3" column="0">
@@ -40,7 +40,14 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QSpinBox" name="ctrlSpinSem"/>
+      <widget class="QSpinBox" name="ctrlSpinSem">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>6</number>
+       </property>
+      </widget>
      </item>
      <item row="4" column="2">
       <spacer name="horizontalSpacer_3">
