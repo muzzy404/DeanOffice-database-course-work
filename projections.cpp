@@ -3,69 +3,67 @@
 #include <QSqlQuery>
 #include <QVariant>
 
-std::vector<Projections::Pair> Projections::groups;
-std::vector<Projections::Pair> Projections::studentStatuses;
-std::vector<Projections::Pair> Projections::teacherStatuses;
+std::vector<int> Projections::groupsIds;
+std::vector<int> Projections::studentStatusesIds;
+std::vector<int> Projections::teacherStatusesIds;
+std::vector<int> Projections::departmentsIds;
+std::vector<int> Projections::disciplinesIds;
 
 QStringList Projections::groupsList;
 QStringList Projections::studentStatusesList;
 QStringList Projections::teacherStatusesList;
+QStringList Projections::departmentsList;
+QStringList Projections::disciplinesList;
 
 void Projections::updateAll(const QSqlDatabase & db)
 {
   updateGroups(db);
   updateStatuses(db);
+  updateDepartments(db);
+  updateDisciplines(db);
 }
 
 //----------------------------------------------------------
 void Projections::updateGroups(const QSqlDatabase & db)
 {
-  groups.clear();
-  groupsList.clear();
-
-  QSqlQuery query("SELECT [id], [number] FROM Groups", db);
-
-  while(query.next()) {
-    int id = query.value(0).toInt();
-    QString number = query.value(1).toString();
-
-    groups.push_back(std::make_pair(id, number));
-  }
-  for(Pair & group : groups) {
-    groupsList.push_back(group.second);
-  }
+  QString query("SELECT [id], [number] FROM Groups");
+  load(groupsIds, groupsList, query, db);
 }
 
 void Projections::updateStatuses(const QSqlDatabase & db) {
-  studentStatuses.clear();
-  teacherStatuses.clear();
-  studentStatusesList.clear();
-  teacherStatusesList.clear();
+  QString queryStudents("SELECT [id], [statusStr] FROM Statuses WHERE entity = 'student'");
+  QString queryTeachers("SELECT [id], [statusStr] FROM Statuses WHERE entity = 'teacher'");
 
-  {
-    QSqlQuery query("SELECT [id], [statusStr] FROM Statuses WHERE entity = 'student'", db);
-    while(query.next()) {
-      int id = query.value(0).toInt();
-      QString status = query.value(1).toString();
+  load(studentStatusesIds, studentStatusesList, queryStudents, db);
+  load(teacherStatusesIds, teacherStatusesList, queryTeachers, db);
+}
 
-      studentStatuses.push_back(std::make_pair(id, status));
-    }
-    for(Pair & status : studentStatuses) {
-      studentStatusesList.push_back(status.second);
-    }
-  }
+void Projections::updateDepartments(const QSqlDatabase & db)
+{
+  QString query("SELECT id, name FROM Departments WHERE active = 'TRUE'");
+  load(departmentsIds, departmentsList, query, db);
+}
 
-  {
-    QSqlQuery query("SELECT [id], [statusStr] FROM Statuses WHERE entity = 'teacher'", db);
-    while(query.next()) {
-      int id = query.value(0).toInt();
-      QString status = query.value(1).toString();
+void Projections::updateDisciplines(const QSqlDatabase &db)
+{
+  QString query("SELECT id, name FROM Disciplines");
+  load(disciplinesIds, disciplinesList, query, db);
+}
 
-      teacherStatuses.push_back(std::make_pair(id, status));
-    }
-    for(Pair & status : teacherStatuses) {
-      teacherStatusesList.push_back(status.second);
-    }
+void Projections::load(std::vector<int> & ids, QStringList & list,
+                       QString queryStr,
+                       const QSqlDatabase & db)
+{
+  ids.clear();
+  list.clear();
+
+  QSqlQuery query(queryStr, db);
+  while(query.next()) {
+    int id = query.value(0).toInt();
+    QString string = query.value(1).toString();
+
+    ids.push_back(id);
+    list.push_back(string);
   }
 }
 //----------------------------------------------------------
@@ -75,18 +73,28 @@ QStringList Projections::getGroupsList()
   return groupsList;
 }
 
-QStringList Projections::getStudentStatuses()
+QStringList Projections::getStudentStatusesList()
 {
   return studentStatusesList;
 }
 
-QStringList Projections::getTeacherStatuses()
+QStringList Projections::getTeacherStatusesList()
 {
   return teacherStatusesList;
+}
+
+QStringList Projections::getDepartmentsList()
+{
+  return departmentsList;
+}
+
+QStringList Projections::getDisciplinesList()
+{
+  return disciplinesList;
 }
 //----------------------------------------------------------
 
 int Projections::getGroupId(int index)
 {
-  return groups.at(index).first;
+  return groupsIds.at(index);
 }

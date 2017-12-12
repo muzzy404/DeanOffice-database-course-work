@@ -16,9 +16,13 @@ SecretaryMainWindow::SecretaryMainWindow(std::shared_ptr<QSqlDatabase> database,
   Projections::updateAll(*db);
 
   ui->stComBoxGroup->addItems(Projections::getGroupsList());
-  ui->stComBoxStatus->addItems(Projections::getStudentStatuses());
+  ui->stComBoxStatus->addItems(Projections::getStudentStatusesList());
 
-  ui->tchComBoxStatus->addItems(Projections::getTeacherStatuses());
+  ui->tchComBoxStatus->addItems(Projections::getTeacherStatusesList());
+  ui->tchComBoxDep->addItems(Projections::getDepartmentsList());
+
+  ui->subjComBoxDep->addItems(Projections::getDepartmentsList());
+  ui->subjComBoxDiscipline->addItems(Projections::getDisciplinesList());
 }
 
 SecretaryMainWindow::~SecretaryMainWindow()

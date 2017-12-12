@@ -10,32 +10,42 @@
 class Projections
 {
 public:
-  typedef std::pair<int, QString> Pair;
-
   Projections();
 
   static void updateAll(const QSqlDatabase & db);
   static void updateGroups(const QSqlDatabase & db);
   static void updateStatuses(const QSqlDatabase & db);
+  static void updateDepartments(const QSqlDatabase & db);
+  static void updateDisciplines(const QSqlDatabase & db);
 
   static QStringList getGroupsList();
+  static QStringList getStudentStatusesList();
+  static QStringList getTeacherStatusesList();
+  static QStringList getDepartmentsList();
+  static QStringList getDisciplinesList();
+
   static int getGroupId(int index);
-
-  static QStringList getStudentStatuses();
-  static int getStudentStatusId(int index);
-
-  static QStringList getTeacherStatuses();
-  static int getTeacherStatusId(int index);
+  static int getStudentStatusId(int index); //TODO
+  static int getTeacherStatusId(int index); //TODO
+  static int getDepartmentsId(int index);   //TODO
+  static int getDisciplinesId(int index);   //TODO
 
 private:
-  static std::vector<Pair> groups;
+  static std::vector<int> groupsIds;
+  static std::vector<int> studentStatusesIds;
+  static std::vector<int> teacherStatusesIds;
+  static std::vector<int> departmentsIds;
+  static std::vector<int> disciplinesIds;
+
   static QStringList groupsList;
-
-  static std::vector<Pair> studentStatuses;
   static QStringList studentStatusesList;
-
-  static std::vector<Pair> teacherStatuses;
   static QStringList teacherStatusesList;
+  static QStringList departmentsList;
+  static QStringList disciplinesList;
+
+  static void load(std::vector<int> & ids, QStringList & list,
+                   QString queryStr,
+                   const QSqlDatabase & db);
 };
 
 #endif // PROJECTIONS_H
