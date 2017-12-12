@@ -29,6 +29,8 @@ private slots:
 
   void on_stBtnFlowList_clicked();
 
+  void on_tchBtnList_clicked();
+
 private:
   Ui::ListsWindow * ui;
   std::shared_ptr<QSqlDatabase> db;

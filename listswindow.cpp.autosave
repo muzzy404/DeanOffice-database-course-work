@@ -105,5 +105,5 @@ void ListsWindow::on_tchBtnList_clicked()
     return;
   }
 
-
+  
 }
