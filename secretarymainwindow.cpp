@@ -131,3 +131,38 @@ void SecretaryMainWindow::on_tchBtnAdd_clicked()
   ui->tchEditFirstname->clear();
   ui->tchEditPatronymic->clear();
 }
+
+void SecretaryMainWindow::on_subjBtnAdd_clicked()
+{
+  if (!ui->subjCheckBoxPass->isChecked() && !ui->subjCheckBoxExam->isChecked()) {
+    QMessageBox::critical(this, inputErrorHeader,
+                          "Предмет должен иметь хотя бы одну зачетную единицу.");
+    return;
+  }
+
+  QString disc = QString::number(Projections::getDisciplinesId(
+                                   ui->subjComBoxDiscipline->currentIndex()));
+  QString dep  = QString::number(Projections::getDepartmentsId(
+                                   ui->subjComBoxDep->currentIndex()));
+  QString sem = ui->subjSpinSem->text();
+
+  QString pass = ui->subjCheckBoxPass->isChecked() ? "TRUE" : "FALSE";
+  QString exam = ui->subjCheckBoxExam->isChecked() ? "TRUE" : "FALSE";
+
+  QSqlQuery query(*db);
+  query.prepare("INSERT INTO Subjects (discipline, department, sem, pass, exam, active)"
+                "VALUES (?, ?, ?, ?, ?, ?)");
+  query.addBindValue(disc);
+  query.addBindValue(dep);
+  query.addBindValue(sem);
+  query.addBindValue(pass);
+  query.addBindValue(exam);
+  query.addBindValue("TRUE");
+
+  if (!query.exec()) {
+    QMessageBox::critical(this, additionHeader, additionErrorMessage);
+    return;
+  }
+
+  QMessageBox::information(this, additionHeader, additionSuccessMessage);
+}
