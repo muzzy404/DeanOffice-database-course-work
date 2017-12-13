@@ -31,6 +31,10 @@ private slots:
 
   void on_tchBtnList_clicked();
 
+  void on_ctrlBtnPassList_clicked();
+
+  void on_ctrlBtnExamsList_clicked();
+
 private:
   Ui::ListsWindow * ui;
   std::shared_ptr<QSqlDatabase> db;
@@ -40,6 +44,9 @@ private:
   void loadComboBoxItems();
   void setFioHeaders();
   void showQueryResult();
+  void newModel();
+
+  QString ctrlListSetUp();
 };
 
 #endif // LISTSWINDOW_H
