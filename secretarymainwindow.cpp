@@ -166,3 +166,49 @@ void SecretaryMainWindow::on_subjBtnAdd_clicked()
 
   QMessageBox::information(this, additionHeader, additionSuccessMessage);
 }
+
+void SecretaryMainWindow::on_disciplineBtnAdd_clicked()
+{
+  QString name = ui->disciplineEditName->text();
+  if (name.length() == 0) {
+    QMessageBox::critical(this, inputErrorHeader, inputErrorMessage);
+    return;
+  }
+
+  QString lectHours  = ui->disciplineSpinLectHours->text();
+  QString practHours = ui->disciplineSpinPractHours->text();
+
+  QSqlQuery query(*db);
+  query.prepare("INSERT INTO Disciplines (name, lectureHours, practiceHours)"
+                "VALUES (?, ?, ?)");
+  query.addBindValue(name);
+  query.addBindValue(lectHours);
+  query.addBindValue(practHours);
+
+  if (!query.exec()) {
+    QMessageBox::critical(this, additionHeader, additionErrorMessage);
+    return;
+  }
+
+  QMessageBox::information(this, additionHeader, additionSuccessMessage);
+  updateDisciplinesBox();
+}
+
+void SecretaryMainWindow::on_semBtnAdd_clicked()
+{
+  QString begin = ui->semDateBegin->text();
+  QString end   = ui->semDateEnd->text();
+
+  QSqlQuery query(*db);
+  query.prepare("INSERT INTO Semesters (beginDate, endDate)"
+                "VALUES (?, ?)");
+  query.addBindValue(begin);
+  query.addBindValue(end);
+
+  if (!query.exec()) {
+    QMessageBox::critical(this, additionHeader, additionErrorMessage);
+    return;
+  }
+
+  QMessageBox::information(this, additionHeader, additionSuccessMessage);
+}
