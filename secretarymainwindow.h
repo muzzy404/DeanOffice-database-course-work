@@ -32,7 +32,7 @@ private:
   std::shared_ptr<QSqlDatabase> db;
 
   QString inputErrorHeader  = "Ошибка ввода";
-  QString inputErrorMessage = "Для внесения новой записи все поля должны быть заполены.";
+  QString inputErrorMessage = "Для внесения новой записи все поля должны быть заполнены.";
 
   QString additionHeader = "Добавление";
   QString additionErrorMessage   = "Запись не добавлена. Проверьте поля ввода.";
