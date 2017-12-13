@@ -21,6 +21,7 @@ SecretaryMainWindow::SecretaryMainWindow(std::shared_ptr<QSqlDatabase> database,
 
   ui->tchComBoxStatus->addItems(Projections::getTeacherStatusesList());
   ui->tchComBoxDep->addItems(Projections::getDepartmentsList());
+  ui->tchComBoxDiscipline->addItems(Projections::getDisciplinesList());
 
   ui->subjComBoxDep->addItems(Projections::getDepartmentsList());
   ui->subjComBoxDiscipline->addItems(Projections::getDisciplinesList());
@@ -30,6 +31,8 @@ void SecretaryMainWindow::updateDisciplinesBox()
 {
   Projections::updateDisciplines(*db);
 
+  ui->tchComBoxDiscipline->clear();
+  ui->tchComBoxDiscipline->addItems(Projections::getDisciplinesList());
   ui->subjComBoxDiscipline->clear();
   ui->subjComBoxDiscipline->addItems(Projections::getDisciplinesList());
 }
@@ -53,7 +56,8 @@ void SecretaryMainWindow::on_stBtnAdd_clicked()
   QString firstname  = ui->stEditFirstname->text();
   QString patronymic = ui->StEditPatronymic->text();
 
-  if (lastname.length() == 0 || firstname.length() == 0 ||
+  if (lastname.length() == 0 ||
+      firstname.length() == 0 ||
       patronymic.length() == 0) {
     QMessageBox::critical(this, inputErrorHeader, inputErrorMessage);
     return;
@@ -84,4 +88,46 @@ void SecretaryMainWindow::on_stBtnAdd_clicked()
   ui->stEditLastname->clear();
   ui->stEditFirstname->clear();
   ui->StEditPatronymic->clear();
+}
+
+void SecretaryMainWindow::on_tchBtnAdd_clicked()
+{
+  QString lastname   = ui->tchEditLastname->text();
+  QString firstname  = ui->tchEditFirstname->text();
+  QString patronymic = ui->tchEditPatronymic->text();
+
+  if (lastname.length() == 0 ||
+      firstname.length() == 0 ||
+      patronymic.length() == 0) {
+    QMessageBox::critical(this, inputErrorHeader, inputErrorMessage);
+    return;
+  }
+
+  QString dep    = QString::number(Projections::getDepartmentsId(
+                                     ui->tchComBoxDep->currentIndex()));
+  QString disc   = QString::number(Projections::getDisciplinesId(
+                                     ui->tchComBoxDiscipline->currentIndex()));
+  QString status = QString::number(Projections::getTeacherStatusId(
+                                     ui->tchComBoxStatus->currentIndex()));
+
+  QSqlQuery query(*db);
+  query.prepare("INSERT INTO Teachers (lastName, firstName, patronymic, department, discipline, teacherStatus) "
+                "VALUES (?, ?, ?, ?, ?, ?)");
+
+  query.addBindValue(lastname);
+  query.addBindValue(firstname);
+  query.addBindValue(patronymic);
+  query.addBindValue(dep);
+  query.addBindValue(disc);
+  query.addBindValue(status);
+
+  if (!query.exec()) {
+    QMessageBox::critical(this, additionHeader, additionErrorMessage);
+    return;
+  }
+
+  QMessageBox::information(this, additionHeader, additionSuccessMessage);
+  ui->tchEditLastname->clear();
+  ui->tchEditFirstname->clear();
+  ui->tchEditPatronymic->clear();
 }

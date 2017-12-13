@@ -13,7 +13,7 @@ ListsWindow::ListsWindow(std::shared_ptr<QSqlDatabase> database, QWidget * paren
   ui(new Ui::ListsWindow),
   db(database)
 {
-  Projections::editWindowOpened();
+  //Projections::editWindowOpened();
 
   ui->setupUi(this);
   ui->tableViewDataSpace->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -28,7 +28,7 @@ ListsWindow::ListsWindow(std::shared_ptr<QSqlDatabase> database, QWidget * paren
 
 ListsWindow::~ListsWindow()
 {
-  Projections::editWindowClosed();
+  //Projections::editWindowClosed();
   delete ui;
 }
 
@@ -112,14 +112,15 @@ void ListsWindow::on_tchBtnList_clicked()
   int depId    = Projections::getDepartmentsId(ui->tchrComBoxDep->currentIndex());
   newModel();
 
-  QString query("SELECT DISTINCT lastName, firstName, patronymic");
-  query.append(" FROM Teachers WHERE teacherStatus = ");
+  QString query("SELECT DISTINCT lastName, firstName, patronymic, Disciplines.name");
+  query.append(" FROM Teachers, Disciplines WHERE discipline = Disciplines.id AND teacherStatus = ");
   query.append(QString::number(statusId));
   query.append(" AND department = ");
   query.append(QString::number(depId));
 
   model->setQuery(query, *db);
   setFioHeaders();
+  model->setHeaderData(3, Qt::Horizontal, tr("Дисциплина"));
   showQueryResult();
 }
 

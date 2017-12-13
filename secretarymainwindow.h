@@ -25,6 +25,8 @@ private slots:
 
   void on_stBtnAdd_clicked();
 
+  void on_tchBtnAdd_clicked();
+
 private:
   Ui::SecretaryMainWindow * ui;
   std::shared_ptr<QSqlDatabase> db;
