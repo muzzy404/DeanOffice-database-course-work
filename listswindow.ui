@@ -257,7 +257,7 @@
     <widget class="QTableView" name="tableViewDataSpace"/>
    </item>
    <item row="2" column="1" colspan="2">
-    <layout class="QGridLayout" name="gridLayout_2" columnstretch="3,2,3,0">
+    <layout class="QGridLayout" name="gridLayout_2" columnstretch="3,2,0,0">
      <property name="verticalSpacing">
       <number>6</number>
      </property>
@@ -273,19 +273,6 @@
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-     </item>
-     <item row="5" column="2" colspan="2">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item row="0" column="0" colspan="4">
       <widget class="QLabel" name="label_5">
@@ -323,13 +310,6 @@
        </property>
       </spacer>
      </item>
-     <item row="5" column="1">
-      <widget class="QPushButton" name="tchBtnList">
-       <property name="text">
-        <string>Список</string>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="2" colspan="2">
       <widget class="QLabel" name="label_10">
        <property name="text">
@@ -340,7 +320,10 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="3" column="0" colspan="2">
+      <widget class="QComboBox" name="tchrComBoxStatus"/>
+     </item>
+     <item row="5" column="0" colspan="2">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -353,8 +336,12 @@
        </property>
       </spacer>
      </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QComboBox" name="tchrComBoxStatus"/>
+     <item row="5" column="2" colspan="2">
+      <widget class="QPushButton" name="tchBtnList">
+       <property name="text">
+        <string>Список</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

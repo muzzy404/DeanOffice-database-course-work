@@ -23,9 +23,20 @@ public:
 private slots:
   void on_btnLists_clicked();
 
+  void on_stBtnAdd_clicked();
+
 private:
   Ui::SecretaryMainWindow * ui;
   std::shared_ptr<QSqlDatabase> db;
+
+  QString inputErrorHeader  = "Ошибка ввода";
+  QString inputErrorMessage = "Для внесения новой записи все поля должны быть заполены.";
+
+  QString additionHeader = "Добавление";
+  QString additionErrorMessage   = "Запись не добавлена. Проверьте поля ввода.";
+  QString additionSuccessMessage = "Запись добавлена успешно.";
+
+  void updateDisciplinesBox();
 };
 
 #endif // SECRETARYMAINWINDOW_H
