@@ -13,6 +13,8 @@ ListsWindow::ListsWindow(std::shared_ptr<QSqlDatabase> database, QWidget * paren
   ui(new Ui::ListsWindow),
   db(database)
 {
+  Projections::editWindowOpened();
+
   ui->setupUi(this);
   ui->tableViewDataSpace->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
@@ -26,6 +28,7 @@ ListsWindow::ListsWindow(std::shared_ptr<QSqlDatabase> database, QWidget * paren
 
 ListsWindow::~ListsWindow()
 {
+  Projections::editWindowClosed();
   delete ui;
 }
 
@@ -85,7 +88,7 @@ void ListsWindow::on_stBtnGroupList_clicked()
 
 void ListsWindow::on_stBtnFlowList_clicked()
 {
-  int idDep = Projections::getGroupId(ui->stComBoxDep->currentIndex());
+  int idDep = Projections::getDepartmentsId(ui->stComBoxDep->currentIndex());
   int sem   = ui->stSpinSemFlow->value();
   newModel();
 
@@ -154,5 +157,33 @@ void ListsWindow::on_ctrlBtnExamsList_clicked()
 
   model->setQuery(query, *db);
   model->setHeaderData(0, Qt::Horizontal, tr("Экзамены"));
+  showQueryResult();
+}
+
+void ListsWindow::on_stBtnScholarshipList_clicked()
+{
+  int idDep = Projections::getDepartmentsId(ui->stComBoxDep->currentIndex());
+  int sem   = ui->stSpinSemFlow->value();
+  newModel();
+
+  QString commonPart(" FROM Subjects WHERE Subjects.department = Groups.department AND Subjects.sem = Groups.semNum");
+
+  QString query("SELECT DISTINCT lastName, firstName, patronymic FROM Students, Groups, ExamsCredits");
+  query.append(" WHERE Students.id = ExamsCredits.student AND  Students.groupNumber = Groups.id AND");
+  query.append(" Groups.department = "); query.append(QString::number(idDep));
+  query.append(" AND Groups.semNum = "); query.append(QString::number(sem));
+
+  query.append(" AND (SELECT COUNT(examMark) FROM ExamsCredits");
+  query.append(" WHERE student = Students.id AND examMark > 3 GROUP BY student) = (SELECT COUNT(exam)");
+  query.append(commonPart);
+  query.append(" AND exam = 'TRUE' GROUP BY (department))");
+
+  query.append(" AND (SELECT COUNT(passMark) FROM ExamsCredits");
+  query.append(" WHERE student = Students.id AND passMark = 'TRUE' GROUP BY student) = (SELECT COUNT(pass)");
+  query.append(commonPart);
+  query.append(" AND pass = 'TRUE' GROUP BY (department))");
+
+  model->setQuery(query, *db);
+  setFioHeaders();
   showQueryResult();
 }

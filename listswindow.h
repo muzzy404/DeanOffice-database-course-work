@@ -35,6 +35,8 @@ private slots:
 
   void on_ctrlBtnExamsList_clicked();
 
+  void on_stBtnScholarshipList_clicked();
+
 private:
   Ui::ListsWindow * ui;
   std::shared_ptr<QSqlDatabase> db;
