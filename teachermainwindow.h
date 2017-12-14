@@ -29,12 +29,13 @@ private:
   std::shared_ptr<QSqlDatabase> db;
 
   std::vector<int> teachersIds;
+  std::vector<int> groupsIds;
+
+  int selectedDep = -1;
 
   bool firstSelection = true;
 
-  void loadIds(std::vector<int> & ids,
-               QString queryStr,
-               const QSqlDatabase & db);
+  void loadGroups();
 };
 
 #endif // TEACHERMAINWINDOW_H

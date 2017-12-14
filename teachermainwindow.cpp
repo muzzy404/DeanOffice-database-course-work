@@ -22,6 +22,18 @@ TeacherMainWindow::TeacherMainWindow(std::shared_ptr<QSqlDatabase> database, QWi
   ui->tchComBoxDep->addItems(list);
 }
 
+void TeacherMainWindow::loadGroups()
+{
+  QString query("SELECT id, number FROM Groups WHERE department = ");
+  query.append(QString::number(selectedDep));
+  QStringList list;
+
+  Projections::load(groupsIds, list, query, *db);
+
+  ui->reportComBoxGroup->addItems(list);
+  ui->examsComBoxGroup->addItems(list);
+  ui->attComBoxGroup->addItems(list);
+}
 
 TeacherMainWindow::~TeacherMainWindow()
 {
@@ -35,14 +47,18 @@ void TeacherMainWindow::on_tchComBoxDep_currentIndexChanged(int index)
     return;
   }
 
+  selectedDep = Projections::getDepartmentsId(index - 1);
+
   QString query("SELECT id, lastName FROM Teachers WHERE department = ");
-  query.append(QString::number(Projections::getDepartmentsId(index - 1)));
+  query.append(QString::number(selectedDep));
   QStringList list;
 
   Projections::load(teachersIds, list, query, *db);
 
   ui->tchComBoxName->addItems(list);
   ui->tchComBoxDep->setEnabled(false);
+
+  loadGroups();
 }
 
 void TeacherMainWindow::on_tchComBoxName_currentIndexChanged(int index)
