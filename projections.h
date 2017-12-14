@@ -30,9 +30,13 @@ public:
 
   static int getGroupId(int index);
   static int getStudentStatusId(int index);
-  static int getTeacherStatusId(int index); //TODO
-  static int getDepartmentsId(int index);   //TODO
-  static int getDisciplinesId(int index);   //TODO
+  static int getTeacherStatusId(int index);
+  static int getDepartmentsId(int index);
+  static int getDisciplinesId(int index);
+
+  static void load(std::vector<int> & ids, QStringList & list,
+                   QString queryStr,
+                   const QSqlDatabase & db);
 
 private:
   static std::vector<int> groupsIds;
@@ -47,9 +51,6 @@ private:
   static QStringList departmentsList;
   static QStringList disciplinesList;
 
-  static void load(std::vector<int> & ids, QStringList & list,
-                   QString queryStr,
-                   const QSqlDatabase & db);
   static int editWindows;
 };
 
