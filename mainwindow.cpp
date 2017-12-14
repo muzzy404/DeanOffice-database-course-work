@@ -3,6 +3,7 @@
 
 #include "constants.h"
 #include "secretarymainwindow.h"
+#include "teachermainwindow.h"
 
 #include <QMessageBox>
 #include <QString>
@@ -64,10 +65,12 @@ void MainWindow::on_btnConnect_clicked()
 
     switch (ui->comBoxUser->currentIndex()) {
       case 0: // Admin
-
         break;
-      case 1: // Teacher
+      case 1: { // Teacher
+        TeacherMainWindow * teacherWindow = new TeacherMainWindow(db);
+        teacherWindow->show();
         break;
+      }
       case 2: { // Secretary
         SecretaryMainWindow * secretaryWindow = new SecretaryMainWindow(db);
         secretaryWindow->show();
