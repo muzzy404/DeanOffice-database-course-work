@@ -36,7 +36,7 @@ void TeacherMainWindow::on_tchComBoxDep_currentIndexChanged(int index)
   }
 
   QString query("SELECT id, lastName FROM Teachers WHERE department = ");
-  query.append(QString::number(Projections::getDepartmentsId(index)));
+  query.append(QString::number(Projections::getDepartmentsId(index - 1)));
   QStringList list;
 
   Projections::load(teachersIds, list, query, *db);
