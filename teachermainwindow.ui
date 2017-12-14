@@ -253,7 +253,7 @@
     </layout>
    </item>
    <item row="1" column="0" rowspan="3">
-    <widget class="QTableView" name="tableView"/>
+    <widget class="QTableView" name="tableViewDataSpace"/>
    </item>
    <item row="0" column="1" rowspan="2">
     <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0">

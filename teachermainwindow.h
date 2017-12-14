@@ -24,6 +24,10 @@ private slots:
 
   void on_tchComBoxName_currentIndexChanged(int index);
 
+  void on_examsComBoxGroup_currentIndexChanged(int index);
+
+  void on_attComBoxGroup_currentIndexChanged(int index);
+
 private:
   Ui::TeacherMainWindow * ui;
   std::shared_ptr<QSqlDatabase> db;
@@ -31,11 +35,15 @@ private:
   std::vector<int> teachersIds;
   std::vector<int> groupsIds;
 
+  std::vector<int> examsStudentsIds;
+  std::vector<int> attStudentsIds;
+
   int selectedDep = -1;
 
   bool firstSelection = true;
 
   void loadGroups();
+  QStringList loadStudentsList(int groupId, std::vector<int> ids);
 };
 
 #endif // TEACHERMAINWINDOW_H
