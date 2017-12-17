@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QSqlDatabase>
+#include <QSqlQueryModel>
 
 #include <memory>
 #include <vector>
@@ -26,6 +27,12 @@ private slots:
 
   void on_examsComBoxGroup_currentIndexChanged(int index);
 
+  void on_examsBtnAdd_clicked();
+
+  void on_reportBtnReport_clicked();
+
+  void on_reportBtnGroupList_clicked();
+
 private:
   Ui::TeacherMainWindow * ui;
   std::shared_ptr<QSqlDatabase> db;
@@ -37,17 +44,22 @@ private:
   std::vector<int> attStudentsIds;
   std::vector<int> semIds;
 
-  int selectedDep = -1;
+  int selectedDep        = -1;
   int selectedDiscipline = -1;
+  int selectedSubject    = -1;
 
   bool firstSelection = true;
+
+  std::unique_ptr<QSqlQueryModel> model = nullptr;
 
   void loadGroups();
   void loadSubject();
   void loadSemesters();
   QStringList loadStudentsList(int groupId, std::vector<int> ids);
 
-  void lockUnclockEdits(bool mode);
+  void unlockEdits(bool mode);
+
+  void setFioHeaders();
 };
 
 #endif // TEACHERMAINWINDOW_H

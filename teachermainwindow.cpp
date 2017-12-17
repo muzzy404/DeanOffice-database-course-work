@@ -28,6 +28,8 @@ TeacherMainWindow::TeacherMainWindow(std::shared_ptr<QSqlDatabase> database, QWi
   ui->examsComBoxStudent->setEnabled(false);
 
   loadSemesters();
+  unlockEdits(false);
+  ui->reportBtnGroupList->setEnabled(false);
 }
 
 void TeacherMainWindow::loadSemesters()
@@ -61,6 +63,8 @@ void TeacherMainWindow::loadGroups()
 
   ui->examsComBoxGroup->addItems(list);
   ui->examsComBoxStudent->setEnabled(true);
+
+  ui->reportBtnGroupList->setEnabled(true);
 }
 
 QStringList TeacherMainWindow::loadStudentsList(int groupId, std::vector<int> ids)
@@ -100,7 +104,7 @@ void TeacherMainWindow::loadSubject()
   QString semNum = querySemNum.value(0).toString();
 
   query.clear();
-  query.append("SELECT exam, pass FROM Subjects WHERE department = ");
+  query.append("SELECT exam, pass, id FROM Subjects WHERE department = ");
   query.append(QString::number(selectedDep));
   query.append(" AND discipline = ");
   query.append(QString::number(selectedDiscipline));
@@ -111,11 +115,12 @@ void TeacherMainWindow::loadSubject()
 
   if (!queryDiscipline.next()) {
     QMessageBox::warning(this, "Группа недоступна", "Данный предмет не преподается у этой группы.");
-    lockUnclockEdits(false);
+    unlockEdits(false);
+    selectedSubject = -1;
     return;
   }
 
-  lockUnclockEdits(true);
+  unlockEdits(true);
   // query about exam and pass
   if (queryDiscipline.value(0).toInt() != 1) {
     ui->examsSpinMark->setEnabled(false);
@@ -123,9 +128,11 @@ void TeacherMainWindow::loadSubject()
   if (queryDiscipline.value(1).toInt() != 1) {
     ui->examsCheckBoxPass->setEnabled(false);
   }
+
+  selectedSubject = queryDiscipline.value(2).toInt();
 }
 
-void TeacherMainWindow::lockUnclockEdits(bool mode)
+void TeacherMainWindow::unlockEdits(bool mode)
 {
   ui->reportBtnReport->setEnabled(mode);
   ui->examsBtnAdd->setEnabled(mode);
@@ -196,3 +203,56 @@ void TeacherMainWindow::on_examsComBoxGroup_currentIndexChanged(int index)
   loadSubject();
 }
 
+
+void TeacherMainWindow::on_examsBtnAdd_clicked()
+{
+
+}
+
+void TeacherMainWindow::setFioHeaders()
+{
+  model->setHeaderData(0, Qt::Horizontal, tr("Фамилия"));
+  model->setHeaderData(1, Qt::Horizontal, tr("Имя"));
+  model->setHeaderData(2, Qt::Horizontal, tr("Отчество"));
+}
+
+void TeacherMainWindow::on_reportBtnReport_clicked()
+{
+  model.release();
+  model = std::make_unique<QSqlQueryModel>();
+
+  QString query("SELECT lastName, firstName, patronymic, Groups.semNum, passMark, examMark");
+  query.append(" FROM Students, ExamsCredits, Groups");
+  query.append(" WHERE ExamsCredits.student = Students.id");
+  query.append(" AND Students.groupNumber = Groups.id AND Groups.id = ");
+  query.append(QString::number(groupsIds.at(ui->examsComBoxGroup->currentIndex())));
+  query.append(" AND ExamsCredits.sem = ");
+  query.append(QString::number(semIds.at(ui->commonComBoxSem->currentIndex())));
+  query.append(" AND ExamsCredits.subj = ");
+  query.append(QString::number(selectedSubject));
+
+  model->setQuery(query, *db);
+  setFioHeaders();
+  model->setHeaderData(3, Qt::Horizontal, tr("Семестр"));
+  model->setHeaderData(4, Qt::Horizontal, tr("Зачет"));
+  model->setHeaderData(5, Qt::Horizontal, tr("Экзамен"));
+
+  ui->tableViewDataSpace->setModel(model.get());
+  ui->tableViewDataSpace->show();
+}
+
+void TeacherMainWindow::on_reportBtnGroupList_clicked()
+{
+  model.release();
+  model = std::make_unique<QSqlQueryModel>();
+
+  QString query("SELECT lastName, firstName, patronymic");
+  query.append(" FROM Students WHERE Students.groupNumber = ");
+  query.append(QString::number(groupsIds.at(ui->examsComBoxGroup->currentIndex())));
+
+  model->setQuery(query, *db);
+  setFioHeaders();
+
+  ui->tableViewDataSpace->setModel(model.get());
+  ui->tableViewDataSpace->show();
+}

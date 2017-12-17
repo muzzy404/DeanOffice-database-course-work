@@ -75,8 +75,11 @@
      </item>
     </layout>
    </item>
+   <item row="1" column="0" rowspan="10">
+    <widget class="QTableView" name="tableViewDataSpace"/>
+   </item>
    <item row="0" column="1" rowspan="2">
-    <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0,0,0">
+    <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0,0,0,0">
      <item row="2" column="1">
       <widget class="QPushButton" name="reportBtnReport">
        <property name="text">
@@ -96,6 +99,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Студент</string>
+       </property>
+      </widget>
      </item>
      <item row="3" column="1">
       <widget class="QPushButton" name="reportBtnGroupList">
@@ -137,13 +147,6 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Студент</string>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="0" colspan="2">
       <widget class="Line" name="line_4">
        <property name="frameShadow">
@@ -154,6 +157,13 @@
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QPushButton" name="attBntAttestations">
+       <property name="text">
+        <string>Аттестации студента</string>
        </property>
       </widget>
      </item>
@@ -308,9 +318,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="1" column="0" rowspan="10">
-    <widget class="QTableView" name="tableViewDataSpace"/>
    </item>
    <item row="9" column="1">
     <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,0,0,0,0,0,0,0">
