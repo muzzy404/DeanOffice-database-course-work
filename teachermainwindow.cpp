@@ -24,19 +24,13 @@ TeacherMainWindow::TeacherMainWindow(std::shared_ptr<QSqlDatabase> database, QWi
 
   ui->tchComBoxName->setEnabled(false);
 
-  ui->reportComBoxGroup->setEnabled(false);
   ui->examsComBoxGroup->setEnabled(false);
-  ui->attComBoxGroup->setEnabled(false);
-
   ui->examsComBoxStudent->setEnabled(false);
-  ui->attComBoxStudent->setEnabled(false);
 }
 
 void TeacherMainWindow::loadGroups()
 {
-  ui->reportComBoxGroup->setEnabled(true);
   ui->examsComBoxGroup->setEnabled(true);
-  ui->attComBoxGroup->setEnabled(true);
 
   QString query("SELECT id, number FROM Groups WHERE department = ");
   query.append(QString::number(selectedDep));
@@ -44,12 +38,8 @@ void TeacherMainWindow::loadGroups()
 
   Projections::load(groupsIds, list, query, *db);
 
-  ui->reportComBoxGroup->addItems(list);
   ui->examsComBoxGroup->addItems(list);
-  ui->attComBoxGroup->addItems(list);
-
   ui->examsComBoxStudent->setEnabled(true);
-  ui->attComBoxStudent->setEnabled(true);
 }
 
 QStringList TeacherMainWindow::loadStudentsList(int groupId, std::vector<int> ids)
@@ -75,6 +65,33 @@ QStringList TeacherMainWindow::loadStudentsList(int groupId, std::vector<int> id
   }
 
   return list;
+}
+
+void TeacherMainWindow::loadSubject()
+{
+  QString query("SELECT Groups.semNum FROM Groups WHERE Groups.id = ");
+  query.append(QString::number(groupsIds.at(
+                                 ui->examsComBoxGroup->currentIndex())));
+
+  QSqlQuery querySemNum(query, *db);
+  querySemNum.next();
+
+  QString semNum = querySemNum.value(0).toString();
+
+  query.clear();
+  query.append("SELECT exam, pass FROM Subjects WHERE department = ");
+  query.append(QString::number(selectedDep));
+  query.append(" AND discipline = ");
+  query.append(QString::number(selectedDiscipline));
+  query.append(" AND sem = ");
+  query.append(semNum);
+
+  QSqlQuery queryDiscipline(query, *db);
+
+  if (!queryDiscipline.next()) {
+    QString msg("Данный предмет не преподается у этой группы.");
+    QMessageBox::warning(this, "", msg);
+  }
 }
 
 TeacherMainWindow::~TeacherMainWindow()
@@ -106,7 +123,7 @@ void TeacherMainWindow::on_tchComBoxDep_currentIndexChanged(int index)
 
 void TeacherMainWindow::on_tchComBoxName_currentIndexChanged(int index)
 {
-  QString query("SELECT Disciplines.name FROM Disciplines, Teachers");
+  QString query("SELECT Disciplines.name, Disciplines.id FROM Disciplines, Teachers");
   query.append(" WHERE Disciplines.id = Teachers.discipline AND Teachers.id = ");
   query.append(QString::number(teachersIds.at(index)));
 
@@ -114,6 +131,13 @@ void TeacherMainWindow::on_tchComBoxName_currentIndexChanged(int index)
   querySelect.next();
 
   ui->tchLblSubject->setText(querySelect.value(0).toString());
+
+  int flag = selectedDiscipline;
+  selectedDiscipline = querySelect.value(1).toInt();
+
+  if (flag >= 0) {
+    on_examsComBoxGroup_currentIndexChanged(ui->examsComBoxGroup->currentIndex());
+  }
 }
 
 void TeacherMainWindow::on_examsComBoxGroup_currentIndexChanged(int index)
@@ -124,14 +148,7 @@ void TeacherMainWindow::on_examsComBoxGroup_currentIndexChanged(int index)
   QStringList list = loadStudentsList(group, examsStudentsIds);
 
   ui->examsComBoxStudent->addItems(list);
+
+  loadSubject();
 }
 
-void TeacherMainWindow::on_attComBoxGroup_currentIndexChanged(int index)
-{
-  ui->attComBoxStudent->clear();
-
-  int group = groupsIds.at(index);
-  QStringList list = loadStudentsList(group, attStudentsIds);
-
-  ui->attComBoxStudent->addItems(list);
-}
