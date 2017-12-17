@@ -202,12 +202,7 @@ void TeacherMainWindow::on_examsComBoxGroup_currentIndexChanged(int index)
   ui->examsComBoxStudent->addItems(list);
 
   loadSubject();
-}
-
-
-void TeacherMainWindow::on_examsBtnAdd_clicked()
-{
-
+  on_reportBtnReport_clicked();
 }
 
 void TeacherMainWindow::setFioHeaders()
@@ -222,10 +217,11 @@ void TeacherMainWindow::on_reportBtnReport_clicked()
   model.release();
   model = std::make_unique<QSqlQueryModel>();
 
-  QString query("SELECT lastName, firstName, patronymic, Groups.semNum, passMark, examMark");
-  query.append(" FROM Students, ExamsCredits, Groups");
+  QString query("SELECT Students.lastName, Students.firstName, Students.patronymic,");
+  query.append(" Groups.semNum, passMark, examMark, Teachers.lastName");
+  query.append(" FROM Students, Teachers, ExamsCredits, Groups");
   query.append(" WHERE ExamsCredits.student = Students.id");
-  query.append(" AND Students.groupNumber = Groups.id AND Groups.id = ");
+  query.append(" AND Students.groupNumber = Groups.id AND ExamsCredits.teacher = Teachers.id AND Groups.id = ");
   query.append(QString::number(groupsIds.at(ui->examsComBoxGroup->currentIndex())));
   query.append(" AND ExamsCredits.sem = ");
   query.append(QString::number(semIds.at(ui->commonComBoxSem->currentIndex())));
@@ -237,6 +233,7 @@ void TeacherMainWindow::on_reportBtnReport_clicked()
   model->setHeaderData(3, Qt::Horizontal, tr("Семестр"));
   model->setHeaderData(4, Qt::Horizontal, tr("Зачет"));
   model->setHeaderData(5, Qt::Horizontal, tr("Экзамен"));
+  model->setHeaderData(6, Qt::Horizontal, tr("Преподаватель"));
 
   ui->tableViewDataSpace->setModel(model.get());
   ui->tableViewDataSpace->show();
@@ -280,4 +277,56 @@ void TeacherMainWindow::on_attBntAttestations_clicked()
 
   ui->tableViewDataSpace->setModel(model.get());
   ui->tableViewDataSpace->show();
+}
+
+void TeacherMainWindow::on_examsBtnAdd_clicked()
+{
+  //QString examMark = "\'NULL\'";
+  QString examMark = "NULL";
+  if (ui->examsSpinMark->isEnabled()) {
+    if (ui->examsSpinMark->value() > 1) {
+      examMark = ui->examsSpinMark->text();
+    }
+  }
+
+  //QString passMark = "\'NULL\'";
+  QString passMark = "NULL";
+  if (ui->examsCheckBoxPass->isEnabled()) {
+    //passMark = ui->examsCheckBoxPass->isChecked() ? "\'TRUE\'" : "\'FALSE\'";
+    passMark = ui->examsCheckBoxPass->isChecked() ? "TRUE" : "FALSE";
+  }
+
+  QString student, subject, sem;
+  setDataForInsert(student, subject, sem);
+
+  QString teacher = QString::number(teachersIds.at(ui->tchComBoxName->currentIndex()));
+
+  QSqlQuery query(*db);
+  query.prepare("INSERT INTO ExamsCredits (student, subj, sem, examMark, passMark, teacher) "
+                "VALUES (?, ?, ?, ?, ?, ?)");
+
+  query.addBindValue(student);
+  query.addBindValue(subject);
+  query.addBindValue(sem);
+  query.addBindValue(examMark);
+  query.addBindValue(passMark);
+  query.addBindValue(teacher);
+
+  if (!query.exec()) {
+    QMessageBox::critical(this,
+                          "Ошибка добавления",
+                          "Экзамен и зачёт по данному предмету уже выставлены.");
+    return;
+  }
+
+  on_reportBtnReport_clicked();
+}
+
+void TeacherMainWindow::setDataForInsert(QString & student,
+                                         QString & subject,
+                                         QString & sem)
+{
+  student = QString::number(studentsIds.at(ui->examsComBoxStudent->currentIndex()));
+  subject = QString::number(selectedSubject);
+  sem     = QString::number(semIds.at(ui->commonComBoxSem->currentIndex()));
 }

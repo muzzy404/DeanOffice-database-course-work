@@ -61,6 +61,10 @@ private:
   void unlockEdits(bool mode);
 
   void setFioHeaders();
+
+  void setDataForInsert(QString & student,
+                        QString & subject,
+                        QString & sem);
 };
 
 #endif // TEACHERMAINWINDOW_H
