@@ -35,6 +35,7 @@ private:
 
   std::vector<int> examsStudentsIds;
   std::vector<int> attStudentsIds;
+  std::vector<int> semIds;
 
   int selectedDep = -1;
   int selectedDiscipline = -1;
@@ -42,8 +43,11 @@ private:
   bool firstSelection = true;
 
   void loadGroups();
-  QStringList loadStudentsList(int groupId, std::vector<int> ids);
   void loadSubject();
+  void loadSemesters();
+  QStringList loadStudentsList(int groupId, std::vector<int> ids);
+
+  void lockUnclockEdits(bool mode);
 };
 
 #endif // TEACHERMAINWINDOW_H

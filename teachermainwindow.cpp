@@ -26,6 +26,27 @@ TeacherMainWindow::TeacherMainWindow(std::shared_ptr<QSqlDatabase> database, QWi
 
   ui->examsComBoxGroup->setEnabled(false);
   ui->examsComBoxStudent->setEnabled(false);
+
+  loadSemesters();
+}
+
+void TeacherMainWindow::loadSemesters()
+{
+  QString query("SELECT id, beginDate, endDate FROM Semesters");
+  QStringList list;
+
+  QSqlQuery querySelect(query, *db);
+  while(querySelect.next()) {
+    semIds.push_back(querySelect.value(0).toInt());
+
+    QString sem(querySelect.value(1).toString());
+    sem.append(" - ");
+    sem.append(querySelect.value(2).toString());
+
+    list.push_back(sem);
+  }
+
+  ui->commonComBoxSem->addItems(list);
 }
 
 void TeacherMainWindow::loadGroups()
@@ -89,9 +110,31 @@ void TeacherMainWindow::loadSubject()
   QSqlQuery queryDiscipline(query, *db);
 
   if (!queryDiscipline.next()) {
-    QString msg("Данный предмет не преподается у этой группы.");
-    QMessageBox::warning(this, "", msg);
+    QMessageBox::warning(this, "Группа недоступна", "Данный предмет не преподается у этой группы.");
+    lockUnclockEdits(false);
+    return;
   }
+
+  lockUnclockEdits(true);
+  // query about exam and pass
+  if (queryDiscipline.value(0).toInt() != 1) {
+    ui->examsSpinMark->setEnabled(false);
+  }
+  if (queryDiscipline.value(1).toInt() != 1) {
+    ui->examsCheckBoxPass->setEnabled(false);
+  }
+}
+
+void TeacherMainWindow::lockUnclockEdits(bool mode)
+{
+  ui->reportBtnReport->setEnabled(mode);
+  ui->examsBtnAdd->setEnabled(mode);
+  ui->attBtnAdd->setEnabled(mode);
+
+  ui->examsSpinMark->setEnabled(mode);
+  ui->examsCheckBoxPass->setEnabled(mode);
+
+  ui->attSpinNumber->setEnabled(mode);
 }
 
 TeacherMainWindow::~TeacherMainWindow()
@@ -132,6 +175,7 @@ void TeacherMainWindow::on_tchComBoxName_currentIndexChanged(int index)
 
   ui->tchLblSubject->setText(querySelect.value(0).toString());
 
+  // used to indicate selections made after the first one
   int flag = selectedDiscipline;
   selectedDiscipline = querySelect.value(1).toInt();
 

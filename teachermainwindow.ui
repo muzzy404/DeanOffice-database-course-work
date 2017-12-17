@@ -181,7 +181,7 @@
       </widget>
      </item>
      <item row="5" column="3">
-      <widget class="QPushButton" name="attAdd">
+      <widget class="QPushButton" name="attBtnAdd">
        <property name="text">
         <string>Внести</string>
        </property>
