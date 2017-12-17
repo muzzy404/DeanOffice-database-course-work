@@ -7,6 +7,7 @@
 #include <QStringList>
 #include <QSqlQuery>
 #include <QMessageBox>
+#include <QVariant>
 
 TeacherMainWindow::TeacherMainWindow(std::shared_ptr<QSqlDatabase> database, QWidget * parent) :
   QWidget(parent),
@@ -281,18 +282,15 @@ void TeacherMainWindow::on_attBntAttestations_clicked()
 
 void TeacherMainWindow::on_examsBtnAdd_clicked()
 {
-  //QString examMark = "\'NULL\'";
-  QString examMark = "NULL";
+  QString examMark;
   if (ui->examsSpinMark->isEnabled()) {
     if (ui->examsSpinMark->value() > 1) {
       examMark = ui->examsSpinMark->text();
     }
   }
 
-  //QString passMark = "\'NULL\'";
-  QString passMark = "NULL";
+  QString passMark;
   if (ui->examsCheckBoxPass->isEnabled()) {
-    //passMark = ui->examsCheckBoxPass->isChecked() ? "\'TRUE\'" : "\'FALSE\'";
     passMark = ui->examsCheckBoxPass->isChecked() ? "TRUE" : "FALSE";
   }
 
@@ -308,8 +306,12 @@ void TeacherMainWindow::on_examsBtnAdd_clicked()
   query.addBindValue(student);
   query.addBindValue(subject);
   query.addBindValue(sem);
-  query.addBindValue(examMark);
-  query.addBindValue(passMark);
+
+  examMark.isEmpty() ? query.addBindValue(QVariant(QVariant::String)) :
+                       query.addBindValue(examMark);
+  passMark.isEmpty() ? query.addBindValue(QVariant(QVariant::String)) :
+                       query.addBindValue(passMark);
+
   query.addBindValue(teacher);
 
   if (!query.exec()) {
