@@ -33,6 +33,8 @@ private slots:
 
   void on_reportBtnGroupList_clicked();
 
+  void on_attBntAttestations_clicked();
+
 private:
   Ui::TeacherMainWindow * ui;
   std::shared_ptr<QSqlDatabase> db;
@@ -40,8 +42,7 @@ private:
   std::vector<int> teachersIds;
   std::vector<int> groupsIds;
 
-  std::vector<int> examsStudentsIds;
-  std::vector<int> attStudentsIds;
+  std::vector<int> studentsIds;
   std::vector<int> semIds;
 
   int selectedDep        = -1;
@@ -55,7 +56,7 @@ private:
   void loadGroups();
   void loadSubject();
   void loadSemesters();
-  QStringList loadStudentsList(int groupId, std::vector<int> ids);
+  QStringList loadStudentsList(int groupId, std::vector<int> & ids);
 
   void unlockEdits(bool mode);
 

@@ -67,7 +67,7 @@ void TeacherMainWindow::loadGroups()
   ui->reportBtnGroupList->setEnabled(true);
 }
 
-QStringList TeacherMainWindow::loadStudentsList(int groupId, std::vector<int> ids)
+QStringList TeacherMainWindow::loadStudentsList(int groupId, std::vector<int> & ids)
 {
   ids.clear();
 
@@ -142,6 +142,7 @@ void TeacherMainWindow::unlockEdits(bool mode)
   ui->examsCheckBoxPass->setEnabled(mode);
 
   ui->attSpinNumber->setEnabled(mode);
+  ui->attBntAttestations->setEnabled(mode);
 }
 
 TeacherMainWindow::~TeacherMainWindow()
@@ -196,7 +197,7 @@ void TeacherMainWindow::on_examsComBoxGroup_currentIndexChanged(int index)
   ui->examsComBoxStudent->clear();
 
   int group = groupsIds.at(index);
-  QStringList list = loadStudentsList(group, examsStudentsIds);
+  QStringList list = loadStudentsList(group, studentsIds);
 
   ui->examsComBoxStudent->addItems(list);
 
@@ -252,6 +253,30 @@ void TeacherMainWindow::on_reportBtnGroupList_clicked()
 
   model->setQuery(query, *db);
   setFioHeaders();
+
+  ui->tableViewDataSpace->setModel(model.get());
+  ui->tableViewDataSpace->show();
+}
+
+void TeacherMainWindow::on_attBntAttestations_clicked()
+{
+  model.release();
+  model = std::make_unique<QSqlQueryModel>();
+
+  QString query("SELECT lastName, firstName, patronymic, Groups.semNum, num, tests, attendance");
+  query.append(" FROM Students, Attestation, Groups");
+  query.append(" WHERE Attestation.student = Students.id AND Students.groupNumber = Groups.id");
+  query.append(" AND Students.id = ");
+  query.append(QString::number(studentsIds.at(ui->examsComBoxStudent->currentIndex())));
+  query.append(" AND Attestation.sem = ");
+  query.append(QString::number(semIds.at(ui->commonComBoxSem->currentIndex())));
+
+  model->setQuery(query, *db);
+  setFioHeaders();
+  model->setHeaderData(3, Qt::Horizontal, tr("Семестр"));
+  model->setHeaderData(4, Qt::Horizontal, tr("Аттестация №"));
+  model->setHeaderData(5, Qt::Horizontal, tr("Работа, %"));
+  model->setHeaderData(6, Qt::Horizontal, tr("Посещаемость, %"));
 
   ui->tableViewDataSpace->setModel(model.get());
   ui->tableViewDataSpace->show();
