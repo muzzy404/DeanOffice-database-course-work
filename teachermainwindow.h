@@ -35,6 +35,8 @@ private slots:
 
   void on_attBntAttestations_clicked();
 
+  void on_attBtnAdd_clicked();
+
 private:
   Ui::TeacherMainWindow * ui;
   std::shared_ptr<QSqlDatabase> db;

@@ -332,3 +332,35 @@ void TeacherMainWindow::setDataForInsert(QString & student,
   subject = QString::number(selectedSubject);
   sem     = QString::number(semIds.at(ui->commonComBoxSem->currentIndex()));
 }
+
+void TeacherMainWindow::on_attBtnAdd_clicked()
+{
+  QString student, subject, sem;
+  setDataForInsert(student, subject, sem);
+
+  QString attNumber = ui->attSpinNumber->text();
+  QString attWork   = ui->attSpinWork->text();
+  QString attAttend = ui->attSpinAttendance->text();
+
+  QSqlQuery query(*db);
+  query.prepare("INSERT INTO Attestation (student, subj, sem, num, tests, attendance) "
+                "VALUES (?, ?, ?, ?, ?, ?)");
+
+  query.addBindValue(student);
+  query.addBindValue(subject);
+  query.addBindValue(sem);
+  query.addBindValue(attNumber);
+  query.addBindValue(attWork);
+  query.addBindValue(attAttend);
+
+  if (!query.exec()) {
+    QString msg("Аттестация №");
+    msg.append(attNumber);
+    msg.append(" по данному предмету уже выставлена.");
+
+    QMessageBox::critical(this, "Ошибка добавления", msg);
+    return;
+  }
+
+  on_attBntAttestations_clicked();
+}
