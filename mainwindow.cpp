@@ -64,7 +64,7 @@ void MainWindow::on_btnConnect_clicked()
   if (db->open()) {
 
     switch (ui->comBoxUser->currentIndex()) {
-      case 0: // Admin
+      case 0:   // Admin
         break;
       case 1: { // Teacher
         TeacherMainWindow * teacherWindow = new TeacherMainWindow(db);
@@ -89,5 +89,4 @@ void MainWindow::on_btnConnect_clicked()
   }
 
   db = nullptr;
-  //db->close();
 }
