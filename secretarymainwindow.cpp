@@ -177,11 +177,10 @@ void SecretaryMainWindow::on_disciplineBtnAdd_clicked()
   QString practHours = ui->disciplineSpinPractHours->text();
 
   QSqlQuery query(*db);
-  query.prepare("INSERT INTO Disciplines (name, lectureHours, practiceHours)"
-                "VALUES (?, ?, ?)");
-  query.addBindValue(name);
-  query.addBindValue(lectHours);
-  query.addBindValue(practHours);
+  query.prepare("{CALL addDiscipline (?, ?, ?)}");
+  query.bindValue(0, name);
+  query.bindValue(1, lectHours);
+  query.bindValue(2, practHours);
 
   if (!query.exec()) {
     QMessageBox::critical(this, additionHeader, additionErrorMessage);
