@@ -103,6 +103,7 @@ void ListsWindow::on_stBtnFlowList_clicked()
   model->setQuery(query, *db);
   setFioHeaders();
   model->setHeaderData(3, Qt::Horizontal, tr("Группа"));
+
   showQueryResult();
 }
 

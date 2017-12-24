@@ -70,14 +70,13 @@ void SecretaryMainWindow::on_stBtnAdd_clicked()
                                      ui->stComBoxStatus->currentIndex()));
 
   QSqlQuery query(*db);
-  query.prepare("INSERT INTO Students (lastName, firstName, patronymic, dob, groupNumber, studentStatus) "
-                "VALUES (?, ?, ?, ?, ?, ?)");
-  query.addBindValue(lastname);
-  query.addBindValue(firstname);
-  query.addBindValue(patronymic);
-  query.addBindValue(dob);
-  query.addBindValue(group);
-  query.addBindValue(status);
+  query.prepare("{CALL addStudent (?, ?, ?, ?, ?, ?)}");
+  query.bindValue(0, lastname);
+  query.bindValue(1, firstname);
+  query.bindValue(2, patronymic);
+  query.bindValue(3, dob);
+  query.bindValue(4, group);
+  query.bindValue(5, status);
 
   if (!query.exec()) {
     QMessageBox::critical(this, additionHeader, additionErrorMessage);
