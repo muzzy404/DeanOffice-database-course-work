@@ -110,15 +110,14 @@ void SecretaryMainWindow::on_tchBtnAdd_clicked()
                                      ui->tchComBoxStatus->currentIndex()));
 
   QSqlQuery query(*db);
-  query.prepare("INSERT INTO Teachers (lastName, firstName, patronymic, department, discipline, teacherStatus) "
-                "VALUES (?, ?, ?, ?, ?, ?)");
+  query.prepare("{CALL addTeacher (?, ?, ?, ?, ?, ?)}");
 
-  query.addBindValue(lastname);
-  query.addBindValue(firstname);
-  query.addBindValue(patronymic);
-  query.addBindValue(dep);
-  query.addBindValue(disc);
-  query.addBindValue(status);
+  query.bindValue(0, lastname);
+  query.bindValue(1, firstname);
+  query.bindValue(2, patronymic);
+  query.bindValue(3, disc);
+  query.bindValue(4, dep);
+  query.bindValue(5, status);
 
   if (!query.exec()) {
     QMessageBox::critical(this, additionHeader, additionErrorMessage);
