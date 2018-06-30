@@ -28,24 +28,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    constants.cpp \
-    secretarymainwindow.cpp \
-    listswindow.cpp \
-    projections.cpp \
-    teachermainwindow.cpp
+    src\main.cpp \
+    src\mainwindow.cpp \
+    src\constants.cpp \
+    src\secretarymainwindow.cpp \
+    src\listswindow.cpp \
+    src\projections.cpp \
+    src\teachermainwindow.cpp
 
 HEADERS += \
-        mainwindow.h \
-    secretarymainwindow.h \
-    constants.h \
-    listswindow.h \
-    projections.h \
-    teachermainwindow.h
+    include\mainwindow.h \
+    include\secretarymainwindow.h \
+    include\constants.h \
+    include\listswindow.h \
+    include\projections.h \
+    include\teachermainwindow.h
 
 FORMS += \
-        mainwindow.ui \
-    secretarymainwindow.ui \
-    listswindow.ui \
-    teachermainwindow.ui
+    gui\mainwindow.ui \
+    gui\secretarymainwindow.ui \
+    gui\listswindow.ui \
+    gui\teachermainwindow.ui
